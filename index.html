@@ -8,8 +8,7 @@
 <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="text/babel">
-	const root = document.getElementById("root")
-	function App () {
+	function MinutesToHours () {
 		const [amount, setAmount] = React.useState();
 		const [inverted, setInverted] = React.useState(false);
 		const onChange = (evnet) => {
@@ -24,7 +23,6 @@
 		}
 		return (
 			<div>
-				<h1>Superr Converter</h1>
 				<div>
 					<label htmlFor="minutes">Minutes</label>
 					<input value={inverted ? amount * 60 : amount} id="minutes" placeholder="Minutes" type="number" onChange={onChange} disabled={inverted}/>
@@ -38,6 +36,31 @@
 			</div>
 		);
 	}
+	function KmToMiles() {
+		return <h3>KM 2 M</h3>
+		//TODO: Create KmToMiles Converter.
+	}
+	function App () {
+		const [index, setIndex] = React.useState("xx");
+		const onSelect = (event) => {
+			setIndex(event.target.value);
+		}
+		return (
+			<div>
+				<h1>Superr Converter</h1>
+				<select value={index} onChange={onSelect}>
+					<option value="xx">Select your units</option>
+					<option value="0">Minutes & Hours</option>
+					<option value="1">Km & Miles</option>
+				</select>
+				<hr />
+				{index === "xx" ? "Plese select your units" : null}
+				{index === "0" ? <MinutesToHours /> : null}
+				{index === "1" ? <KmToMiles /> : null}
+			</div>
+		);
+	}
+	const root = document.getElementById("root");
 	ReactDOM.render(<App />, root);
 </script>
 
