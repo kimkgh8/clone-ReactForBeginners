@@ -8,55 +8,34 @@
 <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="text/babel">
-	function MinutesToHours () {
-		const [amount, setAmount] = React.useState();
-		const [inverted, setInverted] = React.useState(false);
-		const onChange = (evnet) => {
-			setAmount(event.target.value);
-		}
-		const reset = () => {
-			setAmount(0);
-		}
-		const onInvert = () => {
-			reset();
-			setInverted((current) => !current);
-		}
-		return (
-			<div>
-				<div>
-					<label htmlFor="minutes">Minutes</label>
-					<input value={inverted ? amount * 60 : amount} id="minutes" placeholder="Minutes" type="number" onChange={onChange} disabled={inverted}/>
-				</div>
-				<div>
-					<label htmlFor="hours">Hours</label>
-					<input value={inverted ? amount : Math.round(amount / 60)} id="hours" placeholder="Hours" type="number" onChange={onChange} disabled={!inverted} />
-				</div>
-				<button onClick={reset}>Reset</button>
-				<button onClick={onInvert}>{inverted ? "Turn back" : "Invert"}</button>
-			</div>
-		);
+	function Btn({text, onClick}) {
+		console.log(text, "was rendered");
+		return <button
+			onClick={onClick}
+			style={{
+				backgroundColor : "tomato",
+				color : "white",
+				padding : "10px 20px",
+				border : 0,
+				borderRadius: 10,
+				marginRight: "5px",
+				fontSize: 10
+			}}>{text}
+		</button>
 	}
-	function KmToMiles() {
-		return <h3>KM 2 M</h3>
-		//TODO: Create KmToMiles Converter.
-	}
+
+	//불필요한 re-render는 React.memo()로 관리할 수 있음
+	// * React.memo()
+	// 컴포넌트가 React.memo()로 wrapping 될 때, React는 컴포넌트를 렌더링하고 결과를 메모이징(Memoizing)한다. 그리고 다음 렌더링이 일어날 때 props가 같다면, React는 메모이징(Memoizing)된 내용을 재사용한다.
+	const MemorizedBtn = React.memo(Btn);
+
 	function App () {
-		const [index, setIndex] = React.useState("xx");
-		const onSelect = (event) => {
-			setIndex(event.target.value);
-		}
+		const [value, setValue] = React.useState("Save Changes");
+		const changeValue = () => setValue("Revert Changes");
 		return (
 			<div>
-				<h1>Superr Converter</h1>
-				<select value={index} onChange={onSelect}>
-					<option value="xx">Select your units</option>
-					<option value="0">Minutes & Hours</option>
-					<option value="1">Km & Miles</option>
-				</select>
-				<hr />
-				{index === "xx" ? "Plese select your units" : null}
-				{index === "0" ? <MinutesToHours /> : null}
-				{index === "1" ? <KmToMiles /> : null}
+				<MemorizedBtn text={value} onClick={changeValue} />
+				<MemorizedBtn text="Continue" />
 			</div>
 		);
 	}
